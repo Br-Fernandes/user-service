@@ -20,6 +20,7 @@ public class User {
     private String email;
     private String password;
     private String adress;
+    private boolean isEnabled;
 
     public User() {
 
@@ -30,5 +31,6 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.isEnabled = false;
     }
 }

@@ -6,4 +6,6 @@ import io.github.brfernandes.userservice.models.User;
 public interface UserService {
 
     User createUser(UserDto userDto);
+
+    Boolean verifyToken(String token);
 }
