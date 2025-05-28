@@ -1,5 +1,8 @@
 package io.github.brfernandes.userservice.services.impl;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
 import io.github.brfernandes.userservice.dtos.UserDto;
 import io.github.brfernandes.userservice.models.Confirmation;
 import io.github.brfernandes.userservice.models.User;
@@ -8,9 +11,6 @@ import io.github.brfernandes.userservice.repositories.UserRepository;
 import io.github.brfernandes.userservice.services.UserService;
 import io.github.brfernandes.userservice.utils.exceptions.EmailExistsException;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +19,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ConfirmationRepository confirmationRepository;
     private final ModelMapper modelMapper;
-    private final KafkaTemplate<String, String> kafkaTemplate;
-
+    
     @Override
     public User createUser(UserDto userDto) {
         if (userRepository.existsByEmail(userDto.getEmail())){
@@ -28,7 +27,6 @@ public class UserServiceImpl implements UserService {
         }
 
         User newUser = modelMapper.map(userDto, User.class);
-        kafkaTemplate.send("create-user-topic", userDto.getEmail());
         return userRepository.save(newUser);
     }
 
