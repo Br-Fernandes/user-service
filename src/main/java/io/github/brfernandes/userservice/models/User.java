@@ -1,13 +1,10 @@
 package io.github.brfernandes.userservice.models;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
 @Document(collection = "users")
 @Getter
@@ -19,7 +16,7 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private String adress;
+    private String address;
     private boolean isEnabled;
 
     public User() {

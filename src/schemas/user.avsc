@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "User",
+  "namespace": "io.github.brfernandes.userservice.dtos",
+  "fields": [
+    {"name": "name", "type": "string"},
+    {"name": "email", "type": "string"},
+    {"name": "password", "type": "string"},
+    {"name": "address", "type": "string"}
+  ]
+}
