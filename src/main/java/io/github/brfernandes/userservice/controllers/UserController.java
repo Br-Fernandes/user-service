@@ -29,7 +29,7 @@ public class UserController {
 
         kafkaTemplate.send("new-user-topic", userKafka);
         
-        return ResponseEntity.ok(userService.createUser(userDto));
+        return ResponseEntity.ok(newUser);
     }
 }
 
