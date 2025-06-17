@@ -8,4 +8,6 @@ public interface UserService {
     User createUser(UserDto userDto);
 
     Boolean verifyToken(String token);
+
+    User findByToken(String token);
 }

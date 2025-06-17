@@ -1,11 +1,14 @@
 package io.github.brfernandes.userservice.controllers;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.brfernandes.userservice.dtos.UserAuthenticationDto;
@@ -30,8 +33,19 @@ public class UserController {
         UserDto userKafka = modelMapper.map(newUser, UserDto.class);
 
         kafkaTemplate.send("new-user-topic", userKafka);
-        authenticationKafkaTemplate.send("new-jwt-topic", new UserAuthenticationDto(userDto.getEmail(), userDto.getPassword()));
         return ResponseEntity.ok(newUser);
+    }       
+
+    @GetMapping("/activate")
+    public ResponseEntity<String> activateUser(@RequestParam String token) {
+        System.out.println("to aqui");
+        User user = userService.findByToken(token);
+        
+        if (userService.verifyToken(token)){
+            authenticationKafkaTemplate.send("new-jwt-topic", new UserAuthenticationDto(user.getEmail(), user.getPassword(), user.isEnabled()));
+            return ResponseEntity.ok("User Activated Successfully");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Token");
     }
 }
 

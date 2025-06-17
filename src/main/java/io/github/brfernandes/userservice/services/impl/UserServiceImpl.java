@@ -32,11 +32,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean verifyToken(String token) {
-        Confirmation confirmation = confirmationRepository.findByToken(token);
-        User user = userRepository.findByEmail(confirmation.getUser().getEmail());
+        User user = findByToken(token);
         user.setEnabled(true);
         userRepository.save(user);
-        //confirmationRepository.delete(confirmation);
         return true;
+    }
+
+    @Override
+    public User findByToken(String token) {
+        Confirmation confirmation = confirmationRepository.findByToken(token);
+        return userRepository.findByEmail(confirmation.getUser().getEmail());
     }
 }
