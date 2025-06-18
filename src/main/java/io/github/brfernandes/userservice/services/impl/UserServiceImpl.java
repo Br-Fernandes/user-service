@@ -22,13 +22,20 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public User createUser(UserDto userDto) {
-        if (userRepository.existsByEmail(userDto.getEmail())){
+        if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new EmailExistsException(userDto.getEmail());
         }
 
-        User newUser = modelMapper.map(userDto, User.class);
-        return userRepository.save(newUser);
+        User user = modelMapper.map(userDto, User.class);
+
+        Confirmation confirmation = new Confirmation(user);
+
+        User newUser = userRepository.save(user);
+        confirmationRepository.save(confirmation);
+
+        return newUser;
     }
+
 
     @Override
     public Boolean verifyToken(String token) {
